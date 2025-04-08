@@ -1,5 +1,5 @@
-
-.signup-container {
+/* Center the login form */
+.login-container {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -8,7 +8,8 @@
     background-color: #ffffff;
 }
 
-.signup-box {
+/* Style the login box */
+.login-box {
     background: white;
     padding: 2rem;
     border-radius: 10px;
@@ -17,7 +18,14 @@
     text-align: center;
 }
 
-.signup-box input {
+/* Heading style */
+.login-box h2 {
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+/* Input fields */
+.login-box input {
     width: 100%;
     padding: 10px;
     margin: 10px 0;
@@ -26,7 +34,8 @@
     font-size: 1rem;
 }
 
-.signup-box button {
+/* Login button */
+.login-box button {
     width: 100%;
     padding: 10px;
     background-color: #007bff;
@@ -38,15 +47,22 @@
     transition: background 0.3s ease-in-out;
 }
 
-.signup-box button:hover {
+.login-box button:hover {
     background-color: #0056b3;
 }
 
-.back-to-login {
+/* Error message styling */
+.error-message {
+    color: red;
+    margin-top: 10px;
+    font-size: 0.9rem;
+}
+
+.create-account-btn {
     margin-top: 10px;
     padding: 10px;
     width: 100%;
-    background-color: #dc3545;
+    background-color: #28a745;
     border: none;
     color: white;
     font-size: 1rem;
@@ -55,6 +71,6 @@
     transition: background 0.3s ease-in-out;
 }
 
-.back-to-login:hover {
-    background-color: #c82333;
+.create-account-btn:hover {
+    background-color: #218838;
 }
