@@ -9,7 +9,7 @@ function SignUpView() {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const [passwordHash, setPasswordHash] = useState("");
     const [phoneNumber, setPhoneNumber] = useState("");
     const [error, setError] = useState(null);
     const navigate = useNavigate();
@@ -20,12 +20,14 @@ function SignUpView() {
             "firstName": firstName,
             "lastName": lastName,
             "email": email,
-            "password": password,
+            "username": "string",
+            "passwordHash": passwordHash,
             "phoneNumber": phoneNumber,
+            "role": "string"
         };
 
         try{
-            const response = await fetch('https://localhost:7116/api/Drivers',{
+            const response = await fetch('https://localhost:7151/api/Users/signup',{
              method: 'POST',
              headers: {
                 'Content-Type': 'application/json'
@@ -80,8 +82,8 @@ function SignUpView() {
                <input
                  type="password"
                  placeholder="Password"
-                 value={password}
-                 onChange={(e) => setPassword(e.target.value)}
+                 value={passwordHash}
+                 onChange={(e) => setPasswordHash(e.target.value)}
                  required
                 />
                <br />
