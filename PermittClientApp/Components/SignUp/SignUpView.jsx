@@ -27,7 +27,7 @@ function SignUpView() {
         };
 
         try{
-            const response = await fetch('https://localhost:7151/api/Users/signup',{
+            const response = await fetch('https://localhost:7151/api/Account/signup',{
              method: 'POST',
              headers: {
                 'Content-Type': 'application/json'
@@ -41,7 +41,7 @@ function SignUpView() {
 
             alert("Account created successfully! You can now log in.");
 
-             // Redirect user to another page or update state
+             // Redirect user to another page or update state 
              navigate('/');
 
         }   catch(error){
