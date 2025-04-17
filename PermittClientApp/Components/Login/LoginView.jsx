@@ -17,7 +17,7 @@ function Login(){
         };
 
         try{
-            const response = await fetch('https://localhost:7116/api/Drivers/login',{
+            const response = await fetch('https://localhost:7151/api/Account/login',{
              method: 'POST',
              headers: {
                 'Content-Type': 'application/json'
@@ -35,7 +35,7 @@ function Login(){
              localStorage.setItem('token', data.token);
 
              // Redirect user to another page or update state
-             navigate('/profile');
+             navigate('/landing');
 
         }   catch(error){
             setError(error.message);
