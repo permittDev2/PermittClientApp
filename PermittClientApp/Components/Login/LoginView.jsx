@@ -26,7 +26,9 @@ function Login(){
             });
 
             if(!response.ok) {
-                throw new Error ('Login failed');
+              const errorData = await response.json(); // Get error message from response
+              setError(errorData); // Set error state with the message from the server
+              return; // Exit the function if there's an error
             }
             
             const data = await response.json();
@@ -37,8 +39,9 @@ function Login(){
              // Redirect user to another page or update state
              navigate('/landing');
 
-        }   catch(error){
-            setError(error.message);
+        } catch(error){
+          console.error("Unexpected error:", error);
+          setError({ general: "Something went wrong. Please try again later." });
         }
     };
 
@@ -65,8 +68,10 @@ function Login(){
         <br />
         <button type="submit">Login</button>
       </form>
-      {error && <p className="error-message">{error}</p>}
-      <p>Don't have an account?</p>
+      {error?.emailErrorMessage && <p className="error-message">{error.emailErrorMessage}</p>}
+      {error?.passwordErrorMessage && <p className="error-message">{error.passwordErrorMessage}</p>}
+      {error?.confirmedEmailErrorMessage && <p className="error-message">{error.confirmedEmailErrorMessage}</p>}
+      {error?.general && <p className="error-message">{error.general}</p>}
       <button className="create-account-btn" onClick={() => navigate('/signup')}>
         Create New Account
       </button>
