@@ -3,6 +3,7 @@ import './App.css'
 import SignUpView from '../Components/SignUp/SignUpView'
 import LoginView from '../Components/Login/LoginView'
 import Landing from '../Components/Landing/LandingView'
+import ConfirmEmail from '../Components/ConfirmEmail/ConfirmEmailView'
 
 function App() {
   
@@ -14,6 +15,7 @@ function App() {
         <Route path="/" element={<LoginView />} />
         <Route path="/signup" element={<SignUpView />} />
         <Route path="/landing" element={<Landing />} />
+        <Route path="/confirm-email" element={<ConfirmEmail />} />
         </Routes>
       </div>
     </Router>

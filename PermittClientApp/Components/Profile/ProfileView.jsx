@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import "./DriverProfileStyle.css";
 
-function DriverProfile() {
+function UserProfile() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -66,4 +66,4 @@ if (error) return <div className="container"><p>Error: {error}</p></div>;
   );
 }
 
-export default DriverProfile;
+export default UserProfile;
