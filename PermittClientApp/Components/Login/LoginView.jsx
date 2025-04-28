@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import "./LoginStyle.css";
 
 function Login(){
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [error, setError] = useState(null);
+    const [error, setError] = useState("");
     const navigate = useNavigate();
 
 
@@ -27,7 +27,7 @@ function Login(){
 
             if(!response.ok) {
               const errorData = await response.json(); // Get error message from response
-              setError(errorData); // Set error state with the message from the server
+              setError({ general: errorData.message }); // Set error state with the message from the server
               return; // Exit the function if there's an error
             }
             
@@ -68,9 +68,10 @@ function Login(){
         <br />
         <button type="submit">Login</button>
       </form>
-      {error?.emailErrorMessage && <p className="error-message">{error.emailErrorMessage}</p>}
-      {error?.passwordErrorMessage && <p className="error-message">{error.passwordErrorMessage}</p>}
-      {error?.confirmedEmailErrorMessage && <p className="error-message">{error.confirmedEmailErrorMessage}</p>}
+
+      <Link to="/forgot-password" className="forgot-password">
+        Forgot Password?
+      </Link>
       {error?.general && <p className="error-message">{error.general}</p>}
       <button className="create-account-btn" onClick={() => navigate('/signup')}>
         Create New Account
