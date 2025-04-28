@@ -4,6 +4,8 @@ import SignUpView from '../Components/SignUp/SignUpView'
 import LoginView from '../Components/Login/LoginView'
 import Landing from '../Components/Landing/LandingView'
 import ConfirmEmail from '../Components/ConfirmEmail/ConfirmEmailView'
+import RequestPasswordReset from '../Components/ResetPassword/RequestPasswordReset'
+import ResetPassword from '../Components/ResetPassword/ResetPasswordView'
 
 function App() {
   
@@ -11,11 +13,12 @@ function App() {
     <Router>
       <div>
         <Routes>
-          
         <Route path="/" element={<LoginView />} />
         <Route path="/signup" element={<SignUpView />} />
         <Route path="/landing" element={<Landing />} />
         <Route path="/confirm-email" element={<ConfirmEmail />} />
+        <Route path="/forgot-password" element={<RequestPasswordReset />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
         </Routes>
       </div>
     </Router>

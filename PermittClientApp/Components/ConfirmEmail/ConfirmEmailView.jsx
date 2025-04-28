@@ -18,17 +18,19 @@ function ConfirmEmail() {
           },
           body: JSON.stringify({ token }), // send token in request body
         });
+
+        const data = await response.json();
   
         if (!response.ok) {
-          const errorText = await response.text();
-          throw new Error(errorText || "Email confirmation failed");
+          setMessage(`❌ ${data.message || "Email confirmation failed."}`);
+          return;
         }
   
-        const successText = await response.text();
-        setMessage(`✅ ${successText} Redirecting to login...`);
+        setMessage(`✅ ${data.message} Redirecting to login...`);
         setTimeout(() => navigate("/"), 3000); // Redirect after 3 seconds
       } catch (error) {
-        setMessage(`❌ ${error.message}`);
+        console.error("Unexpected error:", error);
+        setMessage( "❌Something went wrong. Please try again later." );
       }
     };
   
