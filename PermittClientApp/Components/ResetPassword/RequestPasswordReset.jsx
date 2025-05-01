@@ -23,7 +23,8 @@ function RequestPasswordReset() {
         setMessage(`❌ ${data.message || "Failed to send reset link."}`);
       }
     } catch (error) {
-      setMessage(`❌ Unexpected error: ${error.message}`);
+      console.error("Error:", error);
+      setMessage("❌ Unexpected error, connect the support team.");
     }
   };
 
