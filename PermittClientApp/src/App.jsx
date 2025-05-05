@@ -7,6 +7,7 @@ import ConfirmEmail from '../Components/ConfirmEmail/ConfirmEmailView'
 import RequestPasswordReset from '../Components/ResetPassword/RequestPasswordReset'
 import ResetPassword from '../Components/ResetPassword/ResetPasswordView'
 import SignupSuccessView from '../Components/SignupSuccess/SignupSuccessView'
+import ResendConfirmationView from '../Components/ResendConfirmation/ResendConfirmationView'
 
 function App() {
   
@@ -21,6 +22,8 @@ function App() {
         <Route path="/forgot-password" element={<RequestPasswordReset />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/signup-success" element={<SignupSuccessView />} />
+        <Route path="/resend-confirmation" element={<ResendConfirmationView />} />
+
         </Routes>
       </div>
     </Router>
