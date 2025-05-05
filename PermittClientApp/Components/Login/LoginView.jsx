@@ -25,10 +25,24 @@ function Login(){
              body: JSON.stringify(credentials),
             });
 
-            if(!response.ok) {
-              const errorData = await response.json(); // Get error message from response
-              setError({ general: errorData.message }); // Set error state with the message from the server
-              return; // Exit the function if there's an error
+            if (!response.ok) {
+              const errorData = await response.json();
+              if (errorData.message?.toLowerCase().includes("not confirmed")) {
+                setError({
+                  general: (
+                    <>
+                      {errorData.message}
+                      <br />
+                      <button onClick={() => navigate("/resend-confirmation")}>
+                        Resend Confirmation Email
+                      </button>
+                    </>
+                  ),
+                });
+              } else {
+                setError({ general: errorData.message });
+              }
+              return;
             }
             
             const data = await response.json();

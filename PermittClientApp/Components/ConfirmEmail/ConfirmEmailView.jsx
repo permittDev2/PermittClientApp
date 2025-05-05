@@ -23,6 +23,17 @@ function ConfirmEmail() {
   
         if (!response.ok) {
           setMessage(`❌ ${data.message || "Email confirmation failed."}`);
+          if (data.message?.toLowerCase().includes("expired")) {
+            setMessage(
+              <>
+                ❌ {data.message}
+                <br />
+                <button onClick={() => navigate("/resend-confirmation")}>
+                  Resend confirmation email
+                </button>
+              </>
+            );
+          }
           return;
         }
   
