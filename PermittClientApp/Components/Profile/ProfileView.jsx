@@ -1,69 +1,87 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import "./DriverProfileStyle.css";
+import React, { useState, useEffect } from "react";
 
-function UserProfile() {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const navigate = useNavigate();
+const ProfileView = () => {
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
 
+  // Fetch user profile data on component mount
   useEffect(() => {
-    const fetchProfile = async () => {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        navigate('/'); // Redirect to login if no token
-        return;
-      }
+    fetch("https://localhost:7151/api/Account/user", {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setFirstName(data.firstName || "");
+        setLastName(data.lastName || "");
+        setPhoneNumber(data.phoneNumber || "");
+      })
+      .catch((err) => console.error("Failed to load profile", err));
+  }, []);
 
-      try {
-        const response = await fetch('https://localhost:7116/api/Drivers/Profile', {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-        });
+  // Handle form submit
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-        if (!response.ok) {
-          throw new Error('Failed to fetch profile');
-        }
-
-        console.log(token);
-
-        const data = await response.json();
-        setDriver(data);
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setLoading(false);
-      }
+    const updatedProfile = {
+      firstName,
+      lastName,
+      phoneNumber,
     };
 
-    fetchProfile();
-  }, [navigate]);
-
-  // Logout function
-  const handleLogout = () => {
-    localStorage.removeItem("token"); // Remove token
-    navigate("/"); // Redirect to login
-};
-
-if (loading) return <div className="container"><p>Loading...</p></div>;
-if (error) return <div className="container"><p>Error: {error}</p></div>;
+    fetch("https://localhost:7151/api/Account/profile", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+      body: JSON.stringify(updatedProfile),
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error("Update failed");
+        alert("Profile updated successfully");
+      })
+      .catch((err) => console.error("Failed to update profile", err));
+  };
 
   return (
-    <div className="container">
-      <div className="card">
-        <h2 className="title">Welcome, {driver?.firstName}!</h2>
-            <p className="info"><strong>Name:</strong> {driver?.firstName} {driver.lastName}</p>
-            <p className="info"><strong>Email:</strong> {driver?.email}</p>
-            <p className="info"><strong>Phone:</strong> {driver?.phoneNumber}</p>
-            <p className="info"><strong>LicenseType:</strong> {driver?.licenseType}</p>
-        <button className="logout-button" onClick={handleLogout}>Logout</button>
-      </div>
+    <div className="profile-container">
+      <h2>Account Information</h2>
+      <form onSubmit={handleSubmit}>
+        <h3>User Information</h3>
+        <div className="form-group">
+          <label>First Name</label>
+          <input
+            type="text"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+          />
+        </div>
+
+        <div className="form-group">
+          <label>Last Name</label>
+          <input
+            type="text"
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+          />
+        </div>
+
+        <div className="form-group">
+          <label>Mobile</label>
+          <input
+            type="text"
+            value={phoneNumber}
+            onChange={(e) => setPhoneNumber(e.target.value)}
+          />
+        </div>
+
+        <button type="submit">Save</button>
+      </form>
     </div>
   );
-}
+};
 
-export default UserProfile;
+export default ProfileView;
