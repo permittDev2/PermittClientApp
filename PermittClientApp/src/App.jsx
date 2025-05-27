@@ -9,6 +9,9 @@ import ResetPassword from '../Components/ResetPassword/ResetPasswordView'
 import SignupSuccessView from '../Components/SignupSuccess/SignupSuccessView'
 import ResendConfirmationView from '../Components/ResendConfirmation/ResendConfirmationView'
 import Profile from '../Components/Profile/ProfileView'
+import PropertyWizard from '../Components/PropertyWizard/PropertyWizard'
+import Dashboard from '../Components/Dashboard/Dashboard'
+import ChangePassword from '../Components/Profile/ChangePassword'
 
 function App() {
   
@@ -16,8 +19,8 @@ function App() {
     <Router>
       <div>
         <Routes>
-        <Route path="/" element={<LoginView />} />
-        <Route path="/signup" element={<SignUpView />} />
+        <Route path="/" element={<SignUpView />} />
+        <Route path="/login" element={<LoginView />} />
         <Route path="/landing" element={<Landing />} />
         <Route path="/confirm-email" element={<ConfirmEmail />} />
         <Route path="/forgot-password" element={<RequestPasswordReset />} />
@@ -25,7 +28,9 @@ function App() {
         <Route path="/signup-success" element={<SignupSuccessView />} />
         <Route path="/resend-confirmation" element={<ResendConfirmationView />} />
         <Route path="/profile" element={<Profile />} />
-
+        <Route path="/property-wizard" element={<PropertyWizard />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/changepassword" element={<ChangePassword />} />
         </Routes>
       </div>
     </Router>

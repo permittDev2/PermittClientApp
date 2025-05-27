@@ -38,7 +38,7 @@ function ConfirmEmail() {
         }
   
         setMessage(`✅ ${data.message} Redirecting to login...`);
-        setTimeout(() => navigate("/"), 3000); // Redirect after 3 seconds
+        setTimeout(() => navigate("/login"), 3000); // Redirect after 3 seconds
       } catch (error) {
         console.error("Unexpected error:", error);
         setMessage( "❌Something went wrong. Please try again later." );
