@@ -35,7 +35,7 @@ function ResetPassword() {
       if (response.ok) {
         setSuccess(`✅ ${data.message} Redirecting to login...`);
         setError('');
-        setTimeout(() => navigate("/"), 3000); // Redirect to login page
+        setTimeout(() => navigate("/login"), 3000); // Redirect to login page
       } else {
         setError(`❌ ${data.message 
           || "Unfortunately, something is wrong, Try again or connect the support team."}`);

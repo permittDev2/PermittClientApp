@@ -29,7 +29,7 @@ function ResendConfirmationView() {
             } else {
                 setMessage(`✅ ${result.message} Redirecting to login...` 
                     || "A new confirmation link has been sent. Redirecting to login...");
-                setTimeout(() => navigate("/"), 3000); // Redirect after 3 seconds
+                setTimeout(() => navigate("/login"), 3000); // Redirect after 3 seconds
             }
             
         } catch (err) {
@@ -56,7 +56,7 @@ function ResendConfirmationView() {
                 {message && <p className="success-message">{message}</p>}
                 {error && <p className="error-message">{error}</p>}
 
-                <button className="back-to-login" onClick={() => navigate("/")}>
+                <button className="back-to-login" onClick={() => navigate("/login")}>
                     Back to Login
                 </button>
             </div>
