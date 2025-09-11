@@ -8,7 +8,7 @@ function RequestPasswordReset() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('https://localhost:7151/api/account/forgot-password', {
+      const response = await fetch('http://localhost:8080/api/account/forgot-password', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

@@ -23,7 +23,7 @@ function ResetPassword() {
     }
 
     try {
-      const response = await fetch('https://localhost:7151/api/account/reset-password', {
+      const response = await fetch('http://localhost:8080/api/account/reset-password', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

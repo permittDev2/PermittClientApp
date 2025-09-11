@@ -35,7 +35,7 @@ const ProfileView = () => {
       }
 
       // Fetch user profile data
-      fetch("https://localhost:7151/api/Account/user", {
+      fetch('http://localhost:8080/api/Account/user', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
