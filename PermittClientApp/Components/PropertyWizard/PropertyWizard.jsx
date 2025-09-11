@@ -75,7 +75,7 @@ function PropertyWizard() {
             try {
                 const token = localStorage.getItem('token');
                 console.log("Submitting formData:", JSON.stringify(formData, null, 2));
-                const response = await fetch('https://localhost:7151/api/Case', {
+                const response = await fetch('http://localhost:8080/api/Case', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

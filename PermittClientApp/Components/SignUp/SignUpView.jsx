@@ -23,7 +23,7 @@ function SignUpView() {
         };
 
         try{
-            const response = await fetch('https://localhost:7151/api/Account/signup',{
+            const response = await fetch('http://localhost:8080/api/Account/signup',{
              method: 'POST',
              headers: {
                 'Content-Type': 'application/json'

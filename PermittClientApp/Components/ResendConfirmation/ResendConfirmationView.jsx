@@ -14,7 +14,7 @@ function ResendConfirmationView() {
         setError("");
 
         try {
-            const response = await fetch("https://localhost:7151/api/Account/resend-confirmation-email", {
+            const response = await fetch('http://localhost:8080/api/resend-confirmation-email', {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
