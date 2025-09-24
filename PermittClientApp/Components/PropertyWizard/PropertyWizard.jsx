@@ -29,9 +29,9 @@ function PropertyWizard() {
     // State for all form data
     const [formData, setFormData] = useState({
         location: {
-            Street: '',
-            SostalCode: '',
-            City: ''
+            street: '',
+            postalCode: '',
+            city: ''
         },
         measurementUnit: 'metric',
         numberOfFloors: 1,
@@ -73,8 +73,31 @@ function PropertyWizard() {
         if (currentStep === steps.length - 1) {
             // Submit the final data
             try {
+                // First, call AI model to generate floorplan
+                let aiData = null;
+                try {
+                    const aiResponse = await fetch('http://localhost:8001/generate-floorplan_V1', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(formData)
+                    });
+
+                    if (!aiResponse.ok) {
+                        const aiErrorText = await aiResponse.text();
+                        console.warn(`AI generation failed: ${aiResponse.status} ${aiResponse.statusText} - ${aiErrorText}`);
+                    } else {
+                        aiData = await aiResponse.json();
+                        console.log('AI floorplan generated successfully:', aiData);
+                    }
+                } catch (aiError) {
+                    console.error('Error calling AI model:', aiError);
+                }
+
                 const token = localStorage.getItem('token');
                 console.log("Submitting formData:", JSON.stringify(formData, null, 2));
+                
                 const response = await fetch('http://localhost:8080/api/Case', {
                     method: 'POST',
                     headers: {
@@ -85,14 +108,17 @@ function PropertyWizard() {
                 });
 
                 if (!response.ok) {
-                    throw new Error('Failed to submit case');
+                    const errorText = await response.text();
+                    throw new Error(`Failed to submit case: ${response.status} ${response.statusText} - ${errorText}`);
                 }
 
                 const data = await response.json();
-                navigate('/dashboard');
+                console.log('Case submitted successfully:', data);
+                const designId = aiData?.id || aiData?.designId || data?.designPreferencesId || data?.id;
+                navigate(`/design/${designId || 'preview'}`, { state: { aiData, formData } });
             } catch (error) {
                 console.error('Error submitting case:', error);
-                // Handle error appropriately
+                alert(`Error submitting case: ${error.message}`);
             }
         } else {
             setCurrentStep(prev => prev + 1);
@@ -259,21 +285,21 @@ function PropertyWizard() {
                         <input
                             type="text"
                             placeholder="Street Address"
-                            value={formData.location.street}
+                            value={formData.location.street || ''}
                             onChange={(e) => updateFormData('location', { ...formData.location, street: e.target.value })}
                             className="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                         <input
                             type="text"
                             placeholder="Postal Code"
-                            value={formData.location.postalCode}
+                            value={formData.location.postalCode || ''}
                             onChange={(e) => updateFormData('location', { ...formData.location, postalCode: e.target.value })}
                             className="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                         <input
                             type="text"
                             placeholder="City"
-                            value={formData.location.city}
+                            value={formData.location.city || ''}
                             onChange={(e) => updateFormData('location', { ...formData.location, city: e.target.value })}
                             className="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
