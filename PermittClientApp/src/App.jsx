@@ -10,6 +10,7 @@ import SignupSuccessView from '../Components/SignupSuccess/SignupSuccessView'
 import ResendConfirmationView from '../Components/ResendConfirmation/ResendConfirmationView'
 import Profile from '../Components/Profile/ProfileView'
 import PropertyWizard from '../Components/PropertyWizard/PropertyWizard'
+import DesignPreview from '../Components/DesignPreview/DesignPreview'
 import Dashboard from '../Components/Dashboard/Dashboard'
 import ChangePassword from '../Components/Profile/ChangePassword'
 
@@ -29,6 +30,7 @@ function App() {
         <Route path="/resend-confirmation" element={<ResendConfirmationView />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/property-wizard" element={<PropertyWizard />} />
+        <Route path="/design/:id" element={<DesignPreview />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/changepassword" element={<ChangePassword />} />
         </Routes>
