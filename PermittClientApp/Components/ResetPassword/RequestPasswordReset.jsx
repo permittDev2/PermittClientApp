@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { getApiUrl } from '../../src/config/api'; 
 import './RequestPasswordResetStyle.css'; 
 
 function RequestPasswordReset() {
@@ -8,7 +9,7 @@ function RequestPasswordReset() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:8080/api/account/forgot-password', {
+      const response = await fetch(getApiUrl('account/forgot-password'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

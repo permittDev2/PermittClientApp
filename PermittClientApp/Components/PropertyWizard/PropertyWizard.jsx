@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { getApiUrl } from '../../src/config/api';
 import { useNavigate } from 'react-router-dom';
 import logo from '../../src/assets/Permitt nav logo.png';
 import { 
@@ -27,7 +28,19 @@ function PropertyWizard() {
     const navigate = useNavigate();
 
     // State for all form data
-    const [formData, setFormData] = useState({
+    const generateUuid = () => {
+        if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+            return crypto.randomUUID();
+        }
+        // Fallback UUID v4 generator
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+            const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+        });
+    };
+
+    const [formData, setFormData] = useState(() => ({
+        designPreferencesId: generateUuid(),
         location: {
             street: '',
             postalCode: '',
@@ -45,7 +58,7 @@ function PropertyWizard() {
             }
         ],
         additionalNotes: ''
-    });
+    }));
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -76,7 +89,7 @@ function PropertyWizard() {
                 // First, call AI model to generate floorplan
                 let aiData = null;
                 try {
-                    const aiResponse = await fetch('http://localhost:8001/generate-floorplan_V1', {
+                    const aiResponse = await fetch('http://localhost:8000/generate-floorplan_V1', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
@@ -98,13 +111,20 @@ function PropertyWizard() {
                 const token = localStorage.getItem('token');
                 console.log("Submitting formData:", JSON.stringify(formData, null, 2));
                 
-                const response = await fetch('http://localhost:8080/api/Case', {
+                const payload = {
+                    ...formData,
+                    Id: formData.designPreferencesId,
+                    AreaPerFloor: formData.area,
+                    AdditionalNotes: formData.additionalNotes
+                };
+
+                const response = await fetch(getApiUrl('Case'), {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${token}`
                     },
-                    body: JSON.stringify(formData)
+                    body: JSON.stringify(payload)
                 });
 
                 if (!response.ok) {

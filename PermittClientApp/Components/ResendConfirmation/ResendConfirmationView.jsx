@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { getApiUrl } from '../../src/config/api'; 
 import { useNavigate } from "react-router-dom";
 import "./ResendConfirmationStyle.css"; 
 
@@ -14,7 +15,7 @@ function ResendConfirmationView() {
         setError("");
 
         try {
-            const response = await fetch('http://localhost:8080/api/resend-confirmation-email', {
+            const response = await fetch(getApiUrl('resend-confirmation-email'), {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
