@@ -2,34 +2,19 @@
 // Centralized configuration for API endpoints
 // Change the base URL here to update it across all components
 
-// Port configuration for different environments
-const PORTS = {
-  LOCAL: 7151,    // Local machine port
-  DOCKER: 8080    // Docker port
-};
+// Define two base URLs and select the active one by changing API_BASE only
+export const API_BASE_HTTP = 'http://localhost:8080';
+export const API_BASE_HTTPS = 'https://localhost:7151';
 
-// Determine which port to use based on environment
-const getPort = () => {
-  // Check if we're running in Docker or production
-  if (process.env.NODE_ENV === 'production' || process.env.REACT_APP_ENV === 'docker') {
-    return PORTS.DOCKER;
-  }
-  return PORTS.LOCAL;
-};
+// Change this one variable to switch environments
+export const API_BASE = API_BASE_HTTPS; // or API_BASE_HTTPS
 
 export const API_CONFIG = {
-  BASE_URL: `http://localhost:${getPort()}/api/`,
-  
-  // API Endpoints
-  ENDPOINTS: {
-    ACCOUNT: {
-      LOGIN: 'Account/login',
-      SIGNUP: 'Account/signup',
-      CONFIRM_EMAIL: 'account/confirm-email',
-    },
-    CASE: 'Case',
-  }
+  BASE_URL: `${API_BASE}/api/`,
 };
+
+// Separate AI service base URL (non-API path)
+export const AI_BASE = 'http://localhost:8000';
 
 // Helper function to build full API URLs
 export const buildApiUrl = (endpoint) => {
@@ -39,4 +24,9 @@ export const buildApiUrl = (endpoint) => {
 // Helper function to get full endpoint URLs
 export const getApiUrl = (endpoint) => {
   return buildApiUrl(endpoint);
+};
+
+// Helper for AI endpoints that are not behind /api
+export const getAiUrl = (endpoint) => {
+  return `${AI_BASE}/${endpoint}`;
 };

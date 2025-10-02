@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { getApiUrl } from '../../src/config/api';
 import { useNavigate } from "react-router-dom";
 import Navbar from "../Navbar/Navbar";
 import { LockClosedIcon } from '@heroicons/react/24/outline';
@@ -35,7 +36,7 @@ const ProfileView = () => {
       }
 
       // Fetch user profile data
-      fetch('http://localhost:8080/api/Account/user', {
+      fetch(getApiUrl('Account/user'), {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -76,7 +77,7 @@ const ProfileView = () => {
     };
 
     try{
-      const response = await fetch("https://localhost:7151/api/Account/profile", {
+      const response = await fetch(getApiUrl('Account/profile'), {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

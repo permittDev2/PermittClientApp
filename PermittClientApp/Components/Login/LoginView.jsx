@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { getApiUrl } from '../../src/config/api';
 import { useNavigate } from 'react-router-dom';
 
 function Login() {
@@ -16,7 +17,7 @@ function Login() {
         };
 
         try {
-            const response = await fetch('http://localhost:8080/api/Account/login', {
+            const response = await fetch(getApiUrl('Account/login'), {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

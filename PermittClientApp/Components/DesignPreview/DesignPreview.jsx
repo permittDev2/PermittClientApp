@@ -1,4 +1,5 @@
 import React, { useMemo, useEffect, useState } from 'react';
+import { getApiUrl, getAiUrl } from '../../src/config/api';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 function DesignPreview() {
@@ -13,8 +14,8 @@ function DesignPreview() {
 		if (aiData || !designId || designId === 'preview') return;
 		const token = localStorage.getItem('token');
 		const fetchData = async () => {
-			try {
-				const res = await fetch(getApiUrl("http://localhost:8080/api/design/${designId}"), {
+            try {
+                const res = await fetch(getApiUrl(`design/${designId}`), {
 					headers: {
 						'Authorization': token ? `Bearer ${token}` : undefined
 					}
@@ -29,22 +30,79 @@ function DesignPreview() {
 		fetchData();
 	}, [aiData, designId]);
 
-	const { imageUrl, pdfUrl, base64Image, base64Pdf, contentType } = useMemo(() => {
+	const [preferences, setPreferences] = useState(null);
+	const [preferencesImageUrl, setPreferencesImageUrl] = useState(null);
+
+	const preferencesId = useMemo(() => {
+		return aiData?.preferencesId || aiData?.designPreferencesId || aiData?.preferences?.id || null;
+	}, [aiData]);
+
+	useEffect(() => {
+		if (!preferencesId) return;
+
+		let isCancelled = false;
+		const token = localStorage.getItem('token');
+		const loadPreferences = async () => {
+	            try {
+	                const res = await fetch(getApiUrl(`Preferences/${preferencesId}`), {
+					headers: {
+						'Authorization': token ? `Bearer ${token}` : undefined
+					}
+				});
+				if (!res.ok) throw new Error(`Failed to load preferences ${preferencesId}`);
+				const json = await res.json();
+				if (!isCancelled) setPreferences(json);
+			} catch (err) {
+				console.error(err);
+			}
+		};
+		loadPreferences();
+		return () => { isCancelled = true; };
+	}, [preferencesId]);
+
+	useEffect(() => {
+		if (!preferencesId) return;
+
+		let isCancelled = false;
+		let objectUrl = null;
+		const token = localStorage.getItem('token');
+		const loadImage = async () => {
+			try {
+				const res = await fetch(getAiUrl(`images/${preferencesId}`), {
+					headers: {
+						'Authorization': token ? `Bearer ${token}` : undefined
+					}
+				});
+				if (!res.ok) throw new Error(`Failed to load image for preferences ${preferencesId}`);
+				const blob = await res.blob();
+				if (isCancelled) return;
+				objectUrl = URL.createObjectURL(blob);
+				setPreferencesImageUrl(objectUrl);
+			} catch (err) {
+				console.error(err);
+			}
+		};
+		loadImage();
+		return () => {
+			isCancelled = true;
+			if (objectUrl) URL.revokeObjectURL(objectUrl);
+		};
+	}, [preferencesId]);
+
+	const { imageUrl, base64Image, contentType } = useMemo(() => {
 		if (!aiData) return {};
 		return {
 			imageUrl: aiData.imageUrl || aiData.image_url || aiData.image || null,
-			pdfUrl: aiData.pdfUrl || aiData.pdf_url || aiData.pdf || null,
 			base64Image: aiData.base64Image || aiData.base64_image || null,
-			base64Pdf: aiData.base64Pdf || aiData.base64_pdf || null,
 			contentType: aiData.contentType || aiData.content_type || null
 		};
 	}, [aiData]);
 
-	const hasAnyPreview = !!(imageUrl || pdfUrl || base64Image || base64Pdf);
+	const hasAnyPreview = !!(preferencesImageUrl || imageUrl || base64Image);
 
 	const buildDataUrl = (b64, typeHint) => {
 		if (!b64) return null;
-		const mime = typeHint || (b64.startsWith('JVBER') ? 'application/pdf' : 'image/png');
+		const mime = typeHint || 'image/png';
 		return `data:${mime};base64,${b64}`;
 	};
 
@@ -65,33 +123,29 @@ function DesignPreview() {
 				</div>
 			)}
 
-			{(imageUrl || base64Image) && (
+			{(preferencesImageUrl || imageUrl || base64Image) && (
 				<div className="bg-white border border-gray-200 rounded-lg p-4 mb-6">
 					<img
-						src={imageUrl || buildDataUrl(base64Image, contentType || 'image/png')}
+						src={preferencesImageUrl || imageUrl || buildDataUrl(base64Image, contentType || 'image/png')}
 						alt="AI generated floor plan"
 						className="w-full h-auto rounded"
 					/>
 				</div>
 			)}
 
-			{(pdfUrl || base64Pdf) && (
-				<div className="bg-white border border-gray-200 rounded-lg p-4">
-					<object
-						data={pdfUrl || buildDataUrl(base64Pdf, contentType || 'application/pdf')}
-						type="application/pdf"
-						className="w-full"
-						style={{ height: '80vh' }}
-					>
-						<p>Your browser does not support PDFs. Download it instead.</p>
-					</object>
-				</div>
-			)}
+
 
 			{formData && (
 				<div className="mt-6 text-sm text-gray-600">
 					<h2 className="font-semibold mb-2">Submitted Parameters</h2>
 					<pre className="bg-gray-100 p-3 rounded overflow-x-auto">{JSON.stringify(formData, null, 2)}</pre>
+				</div>
+			)}
+
+			{preferences && (
+				<div className="mt-6 text-sm text-gray-600">
+					<h2 className="font-semibold mb-2">Preferences (from database)</h2>
+					<pre className="bg-gray-100 p-3 rounded overflow-x-auto">{JSON.stringify(preferences, null, 2)}</pre>
 				</div>
 			)}
 		</div>

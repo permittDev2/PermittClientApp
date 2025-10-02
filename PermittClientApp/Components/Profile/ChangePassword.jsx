@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 import Navbar from "../Navbar/Navbar";
+import { getApiUrl } from '../../src/config/api';
 
 const ChangePassword = () => {
   const [currentPassword, setCurrentPassword] = useState('');
@@ -28,7 +29,7 @@ const ChangePassword = () => {
     }
 
     try {
-      const response = await fetch('http://localhost:8080/api/Account/change-password', {
+      const response = await fetch(getApiUrl('Account/change-password'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
